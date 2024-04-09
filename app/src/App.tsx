@@ -16,8 +16,12 @@ function App() {
   });
 
   const [isEditing, setIsEditing] = useState(false);
-
+  const [showingPost, setShowingPost] = useState("");
   const { data, error, isLoading } = useGetPostsQuery();
+  const handlePostClick = (id: string) => {
+    if(id === showingPost) setShowingPost('')
+    else setShowingPost(id);
+  };
   const [
     newPost,
     {
@@ -64,7 +68,7 @@ function App() {
       console.error(error);
     }
   };
-  
+
   return (
     <div>
       <div>
@@ -115,29 +119,36 @@ function App() {
         {data && (
           <div>
             {data.map((post) => (
-              <div key={post.id} className="flex justify-between my-2">
-                <h1 className="text-2xl capitalize font-bold" key={post.id}>
-                  {post.title}
-                </h1>
-                <div className="flex justify-between gap-2">
-                  <button
-                    onClick={() => {
-                      setIsEditing(true);
-                      setPost(post);
-                    }}
-                    className="border-2 rounded-md py-1 px-2 "
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => {
-                      deletePost(post.id);
-                    }}
-                    className="border-2 rounded-md py-1 px-2 "
-                  >
-                    Delete
-                  </button>
+              <div
+                onClick={() => handlePostClick(post.id)}
+                key={post.id}
+                className=""
+              >
+                <div className="flex justify-between my-2">
+                  <h1 className="text-2xl capitalize font-bold" key={post.id}>
+                    {post.title}
+                  </h1>
+                  <div className="flex justify-between gap-2">
+                    <button
+                      onClick={() => {
+                        setIsEditing(true);
+                        setPost(post);
+                      }}
+                      className="border-2 rounded-md py-1 px-2 "
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => {
+                        deletePost(post.id);
+                      }}
+                      className="border-2 rounded-md py-1 px-2 "
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
+                {post.id === showingPost && <p>{post.body}</p>}
               </div>
             ))}
           </div>
