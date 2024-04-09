@@ -7,7 +7,6 @@ import {
   useNewPostMutation,
   useUpdatePostMutation,
 } from "./redux/Posts/posts";
-// import {}  from ''
 function App() {
   const [post, setPost] = useState<Post>({
     id: "",
@@ -49,20 +48,23 @@ function App() {
   const postToServer = async () => {
     try {
       const { title, body, views } = post;
-      if (isEditing) await updatePost(post);
-      else await newPost({ title, body, views }).unwrap();
-      if (!updatingFailed && !postingFailed)
-        setPost({
-          id: "",
-          title: "",
-          body: "",
-          views: 0,
-        });
+      if (isEditing) {
+        await updatePost({ id: post.id, title, body, views }).unwrap();
+      } else {
+        await newPost({ title, body, views }).unwrap();
+      }
+      setPost({
+        id: "",
+        title: "",
+        body: "",
+        views: 0,
+      });
+      setIsEditing(false); // Reset editing state after successful post
     } catch (error) {
       console.error(error);
     }
   };
-
+  
   return (
     <div>
       <div>

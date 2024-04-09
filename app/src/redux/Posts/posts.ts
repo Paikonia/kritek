@@ -31,7 +31,7 @@ export const postAPI = createApi({
     updatePost: builder.mutation<Post, Partial<Post> & Pick<Post, "id">>({
       query: ({ id, ...post }) => ({
         url: `posts/${id}`,
-        method: "patch",
+        method: "put",
         body: post,
       }),
       invalidatesTags: (_result, _error, {id}) => [{type: 'Posts', id}]
